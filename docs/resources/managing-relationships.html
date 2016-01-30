@@ -5,9 +5,9 @@
         
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <title>Beesly | Beesly</title>
+        <title>Managing Relationships | Beesly</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <meta name="description" content="Beesly is a JavaScript library for consuming Hypermedia APIs following the HAL specification.">
+        <meta name="description" content="">
         <meta name="generator" content="GitBook 2.4.3">
         
         
@@ -15,13 +15,13 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
         <meta name="apple-mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-status-bar-style" content="black">
-        <link rel="apple-touch-icon-precomposed" sizes="152x152" href="gitbook/images/apple-touch-icon-precomposed-152.png">
-        <link rel="shortcut icon" href="gitbook/images/favicon.ico" type="image/x-icon">
+        <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../../gitbook/images/apple-touch-icon-precomposed-152.png">
+        <link rel="shortcut icon" href="../../gitbook/images/favicon.ico" type="image/x-icon">
         
-    <link rel="stylesheet" href="gitbook/style.css">
+    <link rel="stylesheet" href="../../gitbook/style.css">
     
         
-        <link rel="stylesheet" href="gitbook/plugins/gitbook-plugin-prism/prism.css">
+        <link rel="stylesheet" href="../../gitbook/plugins/gitbook-plugin-prism/prism.css">
         
     
     
@@ -29,8 +29,10 @@
         
     
     
-    <link rel="next" href="./docs/installation.html" />
+    <link rel="next" href="../../LICENSE.html" />
     
+    
+    <link rel="prev" href="../../docs/resources/making-requests.html" />
     
 
         
@@ -38,7 +40,7 @@
     <body>
         
         
-    <div class="book" data-level="0" data-basepath="." data-revision="Sat Jan 30 2016 15:08:14 GMT-0500 (EST)">
+    <div class="book" data-level="2.3" data-basepath="../.." data-revision="Sat Jan 30 2016 15:08:14 GMT-0500 (EST)">
     
 
 <div class="book-summary">
@@ -56,10 +58,10 @@
 
             
     
-        <li class="chapter active" data-level="0" data-path="index.html">
+        <li class="chapter " data-level="0" data-path="index.html">
             
                 
-                    <a href="./index.html">
+                    <a href="../../index.html">
                 
                         <i class="fa fa-check"></i>
                         
@@ -72,7 +74,7 @@
         <li class="chapter " data-level="1" data-path="docs/installation.html">
             
                 
-                    <a href="./docs/installation.html">
+                    <a href="../../docs/installation.html">
                 
                         <i class="fa fa-check"></i>
                         
@@ -87,7 +89,7 @@
         <li class="chapter " data-level="2" data-path="docs/resources/index.html">
             
                 
-                    <a href="./docs/resources/index.html">
+                    <a href="../../docs/resources/index.html">
                 
                         <i class="fa fa-check"></i>
                         
@@ -103,7 +105,7 @@
         <li class="chapter " data-level="2.1" data-path="docs/resources/basics.html">
             
                 
-                    <a href="./docs/resources/basics.html">
+                    <a href="../../docs/resources/basics.html">
                 
                         <i class="fa fa-check"></i>
                         
@@ -118,7 +120,7 @@
         <li class="chapter " data-level="2.2" data-path="docs/resources/making-requests.html">
             
                 
-                    <a href="./docs/resources/making-requests.html">
+                    <a href="../../docs/resources/making-requests.html">
                 
                         <i class="fa fa-check"></i>
                         
@@ -130,10 +132,10 @@
             
         </li>
     
-        <li class="chapter " data-level="2.3" data-path="docs/resources/managing-relationships.html">
+        <li class="chapter active" data-level="2.3" data-path="docs/resources/managing-relationships.html">
             
                 
-                    <a href="./docs/resources/managing-relationships.html">
+                    <a href="../../docs/resources/managing-relationships.html">
                 
                         <i class="fa fa-check"></i>
                         
@@ -153,7 +155,7 @@
         <li class="chapter " data-level="3" data-path="LICENSE.html">
             
                 
-                    <a href="./LICENSE.html">
+                    <a href="../../LICENSE.html">
                 
                         <i class="fa fa-check"></i>
                         
@@ -261,7 +263,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href="./" >Beesly</a>
+        <a href="../../" >Beesly</a>
     </h1>
 </div>
 
@@ -271,48 +273,8 @@
                 
                     <section class="normal" id="section-">
                     
-                        <h1 id="beesly">beesly</h1>
-<p>Beesly is a JavaScript library for consuming Hypermedia APIs following the
-<a href="http://stateless.co/hal_specification.html" target="_blank">HAL specification</a>.</p>
-<p>Beesly provides a means for representing resources, resource collections,
-following embedded paths and links.</p>
-<h2 id="a-quick-example">A Quick Example</h2>
-<pre><code class="lang-js"><span class="token keyword">import</span> <span class="token punctuation">{</span>Resource<span class="token punctuation">}</span> from <span class="token string">&apos;beesly&apos;</span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> <span class="token punctuation">{</span>Customer<span class="token punctuation">,</span> LineItem<span class="token punctuation">}</span> from <span class="token string">&apos;./resources&apos;</span><span class="token punctuation">;</span>
-
-<span class="token keyword">export</span> <span class="token keyword">class</span> <span class="token class-name">Order</span> <span class="token keyword">extends</span> <span class="token class-name">Resource</span> <span class="token punctuation">{</span>
-  <span class="token keyword">static</span> <span class="token keyword">get</span> <span class="token function">url</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    <span class="token keyword">return</span> <span class="token string">&apos;/order/{id}&apos;</span>
-  <span class="token punctuation">}</span>
-
-  <span class="token function">setup</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">hasOne</span><span class="token punctuation">(</span><span class="token string">&apos;customer&apos;</span><span class="token punctuation">,</span> <span class="token punctuation">{</span><span class="token keyword">class</span><span class="token punctuation">:</span> Customer<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">hasMany</span><span class="token punctuation">(</span><span class="token string">&apos;line_item&apos;</span><span class="token punctuation">,</span> <span class="token punctuation">{</span><span class="token keyword">class</span><span class="token punctuation">:</span> LineItem<span class="token punctuation">,</span> accessor<span class="token punctuation">:</span> <span class="token string">&apos;lineItems&apos;</span><span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token punctuation">}</span>
-<span class="token punctuation">}</span>
-</code></pre>
-<pre><code class="lang-js"><span class="token keyword">import</span> Order from <span class="token string">&apos;./resources&apos;</span><span class="token punctuation">;</span>
-
-<span class="token keyword">var</span> order <span class="token operator">=</span> Order<span class="token punctuation">.</span><span class="token keyword">get</span><span class="token punctuation">(</span><span class="token punctuation">{</span>id<span class="token punctuation">:</span> <span class="token number">1000</span><span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>`Order <span class="token keyword">for</span> $<span class="token punctuation">{</span>order<span class="token punctuation">.</span><span class="token function">customer</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>name<span class="token punctuation">}</span><span class="token punctuation">:</span>`<span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-order<span class="token punctuation">.</span><span class="token function">lineItems</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span><span class="token punctuation">(</span>item<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span>
-  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>`$<span class="token punctuation">{</span>item<span class="token punctuation">.</span><span class="token function">product</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>name<span class="token punctuation">}</span><span class="token punctuation">,</span> $<span class="token punctuation">{</span>item<span class="token punctuation">.</span>quantity<span class="token punctuation">}</span> units`<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span class="token punctuation">)</span>
-</code></pre>
-<h2 id="table-of-contents">Table of Contents</h2>
-<ol>
-<li><a href="docs/installation.html">Installation</a></li>
-<li><a href="docs/resources/index.html">Resources</a><ol>
-<li><a href="docs/resources/basics.html">Basics</a></li>
-<li><a href="docs/resources/making-requests.html">Making Requests</a></li>
-<li><a href="docs/resources/managing-relationships.html">Managing Relationships</a></li>
-</ol>
-</li>
-</ol>
-<h2 id="license">LICENSE</h2>
-<p>Beesly and its documentation are licensed under the <a href="LICENSE.html">MIT License</a>.</p>
+                        <h2 id="managing-relationships">Managing Relationships</h2>
+<p>TODO.</p>
 
                     
                     </section>
@@ -323,17 +285,19 @@ order<span class="token punctuation">.</span><span class="token function">lineIt
         </div>
 
         
+        <a href="../../docs/resources/making-requests.html" class="navigation navigation-prev " aria-label="Previous page: Making Requests"><i class="fa fa-angle-left"></i></a>
         
-        <a href="./docs/installation.html" class="navigation navigation-next navigation-unique" aria-label="Next page: Installation"><i class="fa fa-angle-right"></i></a>
+        
+        <a href="../../LICENSE.html" class="navigation navigation-next " aria-label="Next page: License"><i class="fa fa-angle-right"></i></a>
         
     </div>
 </div>
 
         
-<script src="gitbook/app.js"></script>
+<script src="../../gitbook/app.js"></script>
 
     
-    <script src="gitbook/plugins/gitbook-plugin-github/plugin.js"></script>
+    <script src="../../gitbook/plugins/gitbook-plugin-github/plugin.js"></script>
     
 
 <script>
