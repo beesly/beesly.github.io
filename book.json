@@ -1,0 +1,15 @@
+{
+  "gitbook": "2.4.3",
+  "title": "Beesly",
+  "description": "Beesly is a JavaScript library for consuming Hypermedia APIs following the HAL specification.",
+  "language": "en",
+  "structure": {
+    "summary": "docs/toc.md"
+  },
+  "plugins": ["prism", "-highlight", "github"],
+  "pluginsConfig": {
+    "github": {
+      "url": "https://github.com/mrkrstphr/beesly"
+    }
+  }
+}

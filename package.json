@@ -1,0 +1,20 @@
+{
+  "name": "beesly-docs",
+  "version": "1.0.0",
+  "description": "Beesly Documentation",
+  "author": "Kristopher Wilson <kristopherwilson@gmail.com> (http://kristopherwilson.com)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/beesly/beesly.github.io.git"
+  },
+  "dependencies": {
+    "gitbook": "^2.6.7",
+    "gitbook-cli": "^1.0.1",
+    "gitbook-plugin-github": "^1.1.0",
+    "gitbook-plugin-prism": "^1.0.0"
+  },
+  "scripts": {
+    "start": "gitbook serve"
+  }
+}
