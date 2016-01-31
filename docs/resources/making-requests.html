@@ -25,6 +25,8 @@
         
     
     
+        <link rel="stylesheet" href="../../styles/website.css">
+    
 
         
     
@@ -40,7 +42,7 @@
     <body>
         
         
-    <div class="book" data-level="2.2" data-basepath="../.." data-revision="Sat Jan 30 2016 15:08:14 GMT-0500 (EST)">
+    <div class="book" data-level="2.2" data-basepath="../.." data-revision="Sat Jan 30 2016 20:38:11 GMT-0500 (EST)">
     
 
 <div class="book-summary">
@@ -152,14 +154,80 @@
             
         </li>
     
-        <li class="chapter " data-level="3" data-path="LICENSE.html">
+        <li class="chapter " data-level="3" data-path="docs/http/http.html">
+            
+                
+                    <a href="../../docs/http/http.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>3.</b>
+                        
+                        HTTP Library
+                    </a>
+            
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="3.1" data-path="docs/http/request.html">
+            
+                
+                    <a href="../../docs/http/request.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>3.1.</b>
+                        
+                        Request
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="3.2" data-path="docs/http/response.html">
+            
+                
+                    <a href="../../docs/http/response.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>3.2.</b>
+                        
+                        Response
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="3.3" data-path="docs/http/using-interceptors.html">
+            
+                
+                    <a href="../../docs/http/using-interceptors.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>3.3.</b>
+                        
+                        Using Interceptors
+                    </a>
+            
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="4" data-path="LICENSE.html">
             
                 
                     <a href="../../LICENSE.html">
                 
                         <i class="fa fa-check"></i>
                         
-                            <b>3.</b>
+                            <b>4.</b>
                         
                         License
                     </a>
@@ -274,7 +342,49 @@
                     <section class="normal" id="section-">
                     
                         <h2 id="making-requests">Making Requests</h2>
-<p>TODO.</p>
+<p>Beesly has built in mechanisms to retrieve, save, and remove resources
+by proxying to HTTP calls.</p>
+<p>In order to use these mechanisms, you must define a static <code>url</code> property
+on your resource class:</p>
+<pre><code class="lang-js"><span class="token keyword">import</span> <span class="token punctuation">{</span>Resource<span class="token punctuation">}</span> from <span class="token string">&apos;beesly&apos;</span><span class="token punctuation">;</span>
+
+<span class="token keyword">class</span> <span class="token class-name">Customer</span> <span class="token keyword">extends</span> <span class="token class-name">Resource</span> <span class="token punctuation">{</span>
+  <span class="token keyword">static</span> <span class="token keyword">get</span> <span class="token function">url</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token string">&apos;/customer/{id}&apos;</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>This directs Beesly which URL to hit when retrieving and saving your resource.
+Of course, we don&apos;t have a full URL defined above, so the request won&apos;t work.
+You can define a full URL:</p>
+<pre><code class="lang-js"><span class="token keyword">static</span> <span class="token keyword">get</span> <span class="token function">url</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="token string">&apos;https://example.com/customer/{id}&apos;</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>Or define an Http Request interceptor to modify the URL before making the
+request. This latter method allows you to define the base URL differently
+depending on which environment you are running on (development, production,
+etc).</p>
+<h3 id="get-retrieving-data">GET: Retrieving Data</h3>
+<p>As a <code>GET</code> request is not an operation on an existing resource, it is
+called statically on your <code>Resource</code> and returns an instance of your
+<code>Resource</code> class using the <code>get()</code> method:</p>
+<pre><code class="lang-js"><span class="token keyword">let</span> customer <span class="token operator">=</span> Customer<span class="token punctuation">.</span><span class="token keyword">get</span><span class="token punctuation">(</span><span class="token punctuation">{</span>id<span class="token punctuation">:</span> <span class="token number">300</span><span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<p>The argument to the <code>get()</code> method is an object of parameters that
+are applied to the URL. Remember in our example URL, we provided
+<code>/customer/{id}</code>. When we provide <code>{id: 300}</code>, the URL then becomes
+<code>/customer/300</code>.</p>
+<p>Any parameters provided that are not variables within the URL are ignored.</p>
+<h3 id="get-retrieving-collections">GET: Retrieving Collections</h3>
+<p>A <code>GET</code> request that returns a
+<a href="http://phlyrestfully.readthedocs.org/en/latest/halprimer.html#collections" target="_blank">collection</a>
+should be accessed through the <code>getCollection()</code> static method of your
+<code>Resource</code> class:</p>
+<pre><code class="lang-js"><span class="token keyword">let</span> customers <span class="token operator">=</span> Customer<span class="token punctuation">.</span><span class="token function">getCollection</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<p>Note that this method, too, can accept an argument of URL parameters to
+expand into <code>url</code>.</p>
 
                     
                     </section>

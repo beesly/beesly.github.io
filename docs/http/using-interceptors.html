@@ -5,7 +5,7 @@
         
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <title>Basics | Beesly</title>
+        <title>Using Interceptors | Beesly</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="generator" content="GitBook 2.4.3">
@@ -31,10 +31,10 @@
         
     
     
-    <link rel="next" href="../../docs/resources/making-requests.html" />
+    <link rel="next" href="../../LICENSE.html" />
     
     
-    <link rel="prev" href="../../docs/resources/index.html" />
+    <link rel="prev" href="../../docs/http/response.html" />
     
 
         
@@ -42,7 +42,7 @@
     <body>
         
         
-    <div class="book" data-level="2.1" data-basepath="../.." data-revision="Sat Jan 30 2016 20:38:11 GMT-0500 (EST)">
+    <div class="book" data-level="3.3" data-basepath="../.." data-revision="Sat Jan 30 2016 20:38:11 GMT-0500 (EST)">
     
 
 <div class="book-summary">
@@ -104,7 +104,7 @@
             <ul class="articles">
                 
     
-        <li class="chapter active" data-level="2.1" data-path="docs/resources/basics.html">
+        <li class="chapter " data-level="2.1" data-path="docs/resources/basics.html">
             
                 
                     <a href="../../docs/resources/basics.html">
@@ -200,7 +200,7 @@
             
         </li>
     
-        <li class="chapter " data-level="3.3" data-path="docs/http/using-interceptors.html">
+        <li class="chapter active" data-level="3.3" data-path="docs/http/using-interceptors.html">
             
                 
                     <a href="../../docs/http/using-interceptors.html">
@@ -341,93 +341,62 @@
                 
                     <section class="normal" id="section-">
                     
-                        <h2 id="basics">Basics</h2>
-<p>A <code>Resource</code> represents a single HTTP resource, although it may have nested
-relationships. A resource is the result of an API call. For instance:</p>
-<pre><code class="lang-text">GET /customer/300
-</code></pre>
-<pre><code class="lang-text">HTTP/1.1 200 OK
-Content-Type: application/hal+json
+                        <h2 id="using-interceptors">Using Interceptors</h2>
+<p>Interceptors allow for intercepting an HTTP request and modifying the
+<code>Request</code> object before it is dispatched to the server.</p>
+<h3 id="registering-an-interceptor">Registering an Interceptor</h3>
+<p>Interceptors are registered as a callback with the <code>Http</code> object:</p>
+<pre><code class="lang-js"><span class="token keyword">import</span> <span class="token punctuation">{</span>Http<span class="token punctuation">}</span> from <span class="token string">&apos;beesly&apos;</span><span class="token punctuation">;</span>
 
-{
-  {
-    &quot;_links&quot;: {
-      &quot;self&quot;: {
-        &quot;href&quot;: &quot;/customer/300&quot;
-      }
-    }
-  },
-  &quot;id&quot;: 300,
-  &quot;name&quot;: &quot;ABC Corporation&quot;,
-  &quot;owner&quot;: &quot;Daffy Duck&quot;
-}
+Http<span class="token punctuation">.</span><span class="token function">addIntercept</span><span class="token punctuation">(</span><span class="token punctuation">(</span>request<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+  request<span class="token punctuation">.</span>url <span class="token operator">=</span> `http<span class="token punctuation">:</span><span class="token operator">/</span><span class="token operator">/</span>api<span class="token punctuation">.</span>dev$<span class="token punctuation">{</span>request<span class="token punctuation">.</span>url<span class="token punctuation">}</span>`<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 </code></pre>
-<h3 id="defining-resources">Defining Resources</h3>
-<p>A resource can be defined by extending the <code>Beesly.Resource</code> class. For
-instance, if we wanted to define a resource for our customer response
-above:</p>
-<pre><code class="lang-js"><span class="token keyword">import</span> <span class="token punctuation">{</span>Resource<span class="token punctuation">}</span> from <span class="token string">&apos;beesly&apos;</span><span class="token punctuation">;</span>
+<p>When an HTTP request is made, the <code>Request</code> object is passed to each
+interceptor, allowing it to perform necessary modifications to the
+request.</p>
+<p>Interceptors are run in a first-in, first-out (FIFO) basis:</p>
+<pre><code class="lang-js"><span class="token keyword">import</span> <span class="token punctuation">{</span>Http<span class="token punctuation">,</span> Request<span class="token punctuation">}</span> from <span class="token string">&apos;beesly&apos;</span><span class="token punctuation">;</span>
 
-<span class="token keyword">class</span> <span class="token class-name">Customer</span> <span class="token keyword">extends</span> <span class="token class-name">Resource</span> <span class="token punctuation">{</span>
-  <span class="token comment" spellcheck="true">// ...</span>
-<span class="token punctuation">}</span>
-</code></pre>
-<h3 id="loading-resources-with-data">Loading Resources with Data</h3>
-<p>Once a resource is defined, its constructor will accept an object of data and
-hydrate itself:</p>
-<pre><code class="lang-js"><span class="token keyword">let</span> customer <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Customer</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
-  id<span class="token punctuation">:</span> <span class="token number">300</span><span class="token punctuation">,</span>
-  name<span class="token punctuation">:</span> <span class="token string">&apos;ABC Corporation&apos;</span><span class="token punctuation">,</span>
+Http<span class="token punctuation">.</span><span class="token function">addIntercept</span><span class="token punctuation">(</span><span class="token punctuation">(</span>request<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+  request<span class="token punctuation">.</span>url <span class="token operator">=</span> `http<span class="token punctuation">:</span><span class="token operator">/</span><span class="token operator">/</span>api<span class="token punctuation">.</span>dev$<span class="token punctuation">{</span>request<span class="token punctuation">.</span>url<span class="token punctuation">}</span>`<span class="token punctuation">;</span>
 <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>customer<span class="token punctuation">.</span>name<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token comment" spellcheck="true">// ABC Corporation</span>
-</code></pre>
-<p>This data may come from an HTTP request, or you may be building the resource on
-the fly in preparation of saving it.</p>
-<h3 id="accessing-links">Accessing Links</h3>
-<p>If your API returns <a href="https://tools.ietf.org/html/draft-kelly-json-hal-07#section-4.1.1" target="_blank">hypermedia links</a>,
-you can retrieve those links via the <code>getLink()</code> method, which accepts a name
-as an argument.</p>
-<p>Using our example above, you could retrieve the <code>self</code> link like so:</p>
-<pre><code class="lang-js">console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>customer<span class="token punctuation">.</span><span class="token function">getLink</span><span class="token punctuation">(</span><span class="token string">&apos;self&apos;</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token comment" spellcheck="true">// /customer/300</span>
-</code></pre>
-<p><code>getLink()</code> will only return the <code>href</code> for that link.</p>
-<div class="notice">
-Before the 1.0 stable release, <code>getLink()</code> will likely be modified
-to return an object representation of the link `{&quot;href&quot;: &quot;/foo&quot;}` rather than
-returning just the `href`.
-</div>
+Http<span class="token punctuation">.</span><span class="token function">addIntercept</span><span class="token punctuation">(</span><span class="token punctuation">(</span>request<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+  request<span class="token punctuation">.</span>url <span class="token operator">=</span> `https<span class="token punctuation">:</span><span class="token operator">/</span><span class="token operator">/</span>production<span class="token punctuation">.</span>com$<span class="token punctuation">{</span>request<span class="token punctuation">.</span>url<span class="token punctuation">}</span>`<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-<h3 id="accessing-embedded-data">Accessing Embedded Data</h3>
-<p>If your API returns <a href="https://tools.ietf.org/html/draft-kelly-json-hal-07#section-4.1.2" target="_blank">embedded resources</a>,
-you can retrieve those resources by using the name of the relationship as an
-accessor method.</p>
-<p>For instance, if your API returns:</p>
-<pre><code class="lang-json"><span class="token punctuation">{</span>
-  <span class="token string">&quot;id&quot;</span><span class="token punctuation">:</span> <span class="token number">300</span><span class="token punctuation">,</span>
-  <span class="token string">&quot;name&quot;</span><span class="token punctuation">:</span> <span class="token string">&quot;ABC Corporation&quot;</span><span class="token punctuation">,</span>
-  <span class="token string">&quot;_embedded&quot;</span><span class="token punctuation">:</span> <span class="token punctuation">{</span>
-    <span class="token string">&quot;location&quot;</span><span class="token punctuation">:</span> <span class="token punctuation">[</span>
-      <span class="token punctuation">{</span>
-        <span class="token string">&quot;id&quot;</span><span class="token punctuation">:</span> <span class="token number">10</span><span class="token punctuation">,</span>
-        <span class="token string">&quot;address&quot;</span><span class="token punctuation">:</span> <span class="token string">&quot;123 Main St&quot;</span>
-      <span class="token punctuation">}</span>
-    <span class="token punctuation">]</span>
-  <span class="token punctuation">}</span>
-<span class="token punctuation">}</span>
+<span class="token keyword">let</span> request <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Request</span><span class="token punctuation">(</span><span class="token string">&apos;delete&apos;</span><span class="token punctuation">,</span> <span class="token string">&apos;/foobar&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">new</span> <span class="token class-name">Http</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">send</span><span class="token punctuation">(</span>request<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>request<span class="token punctuation">.</span>url<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">// https://production.com/foobar</span>
 </code></pre>
-<p>You can retrieve a customer&apos;s collection of locations using the <code>location()</code>
-method which is added automatically when an embedded resource with the key
-of <code>location</code> is encountered:</p>
-<pre><code class="lang-js">console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>customer<span class="token punctuation">.</span><span class="token function">location</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token comment" spellcheck="true">// [{&quot;id&quot;: 10, &quot;address&quot;: &quot;123 Main St&quot;}]</span>
+<h3 id="use-cases">Use Cases</h3>
+<p>Interceptors are great for modifying the base URL, as shown in the examples
+above. If you have separate environments with configuration files, you can
+easily have resources that are ignorant of the environment, but are supplied
+a full URL through interceptors:</p>
+<pre><code class="lang-js"><span class="token keyword">import</span> <span class="token punctuation">{</span>Http<span class="token punctuation">}</span> from <span class="token string">&apos;beesly&apos;</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> config from <span class="token string">&apos;./config&apos;</span><span class="token punctuation">;</span>
+
+Http<span class="token punctuation">.</span><span class="token function">addIntercept</span><span class="token punctuation">(</span><span class="token punctuation">(</span>request<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+  request<span class="token punctuation">.</span>url <span class="token operator">=</span> `$<span class="token punctuation">{</span>config<span class="token punctuation">.</span>baseUrl<span class="token punctuation">}</span>$<span class="token punctuation">{</span>request<span class="token punctuation">.</span>url<span class="token punctuation">}</span>`<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 </code></pre>
-<p>If a customer will only ever have one location, it gets pretty awkward to do
-<code>customer.location()[0]</code> all the time.</p>
-<p>Learn how to <a href="managing-relationships.html">manage relationships</a>
-better.</p>
+<p>You can also supply authorization headers for logged in users to pass along
+tokens to the API:</p>
+<pre><code class="lang-js"><span class="token keyword">import</span> <span class="token punctuation">{</span>Http<span class="token punctuation">}</span> from <span class="token string">&apos;beesly&apos;</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> me from <span class="token string">&apos;./me&apos;</span><span class="token punctuation">;</span>
+
+Http<span class="token punctuation">.</span><span class="token function">addIntercept</span><span class="token punctuation">(</span><span class="token punctuation">(</span>request<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+  request<span class="token punctuation">.</span>headers<span class="token punctuation">.</span>Authorization <span class="token operator">=</span> `Bearer $<span class="token punctuation">{</span>me<span class="token punctuation">.</span>accessToken<span class="token punctuation">}</span>`<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<h3 id="bad-use-cases">Bad Use Cases</h3>
+<p>You should not use interceptors to modify specific requests. Instead, use
+a <a href="docs/resources/data-transformers.md">data transformer</a> for the specific
+<code>Resource</code> you are working with.</p>
 
                     
                     </section>
@@ -438,10 +407,10 @@ better.</p>
         </div>
 
         
-        <a href="../../docs/resources/index.html" class="navigation navigation-prev " aria-label="Previous page: Resources"><i class="fa fa-angle-left"></i></a>
+        <a href="../../docs/http/response.html" class="navigation navigation-prev " aria-label="Previous page: Response"><i class="fa fa-angle-left"></i></a>
         
         
-        <a href="../../docs/resources/making-requests.html" class="navigation navigation-next " aria-label="Next page: Making Requests"><i class="fa fa-angle-right"></i></a>
+        <a href="../../LICENSE.html" class="navigation navigation-next " aria-label="Next page: License"><i class="fa fa-angle-right"></i></a>
         
     </div>
 </div>
