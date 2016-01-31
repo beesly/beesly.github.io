@@ -42,7 +42,7 @@
     <body>
         
         
-    <div class="book" data-level="2.3" data-basepath="../.." data-revision="Sat Jan 30 2016 20:38:11 GMT-0500 (EST)">
+    <div class="book" data-level="2.3" data-basepath="../.." data-revision="Sun Jan 31 2016 10:32:39 GMT-0500 (EST)">
     
 
 <div class="book-summary">
@@ -342,7 +342,124 @@
                     <section class="normal" id="section-">
                     
                         <h2 id="managing-relationships">Managing Relationships</h2>
-<p>TODO.</p>
+<p>Beesly allows you to declare relationships on resources. Embedded data is
+considered a relationship to the root resource. Beesly doesn&apos;t make any
+distinctions about how resources are related, just that they are and their
+cardinality.</p>
+<h3 id="the-setup-method">The <code>setup()</code> method</h3>
+<p>Each <code>Resource</code> can provide a <code>setup()</code> method which will be run each time
+a resource is instantiated. It is within this method that we can define the
+resources relationships.</p>
+<pre><code class="lang-js"><span class="token keyword">import</span> <span class="token punctuation">{</span>Resource<span class="token punctuation">}</span> from <span class="token string">&apos;beesly&apos;</span><span class="token punctuation">;</span>
+
+<span class="token keyword">class</span> <span class="token class-name">Customer</span> <span class="token keyword">extends</span> <span class="token class-name">Resource</span> <span class="token punctuation">{</span>
+  <span class="token function">setup</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">&apos;setup()&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<h3 id="one-to-many-relationships">One-to-Many Relationships</h3>
+<p>Beesly allows for mapping One-to-Many relationships through embedded resources
+in the response. Each are defined using the <code>hasMany(key)</code> method:</p>
+<pre><code class="lang-js"><span class="token function">setup</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">hasMany</span><span class="token punctuation">(</span><span class="token string">&apos;contact&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>The <code>key</code> argument is the key in the embedded collection representing this
+relationship:</p>
+<pre><code class="lang-json"><span class="token punctuation">{</span>
+  <span class="token string">&quot;_embedded&quot;</span><span class="token punctuation">:</span> <span class="token punctuation">{</span>
+    <span class="token string">&quot;contact&quot;</span><span class="token punctuation">:</span> <span class="token punctuation">[</span>
+      <span class="token punctuation">{</span>
+        <span class="token string">&quot;name&quot;</span><span class="token punctuation">:</span> <span class="token string">&quot;Carl&quot;</span>
+      <span class="token punctuation">}</span><span class="token punctuation">,</span>
+      <span class="token punctuation">{</span>
+        <span class="token string">&quot;name&quot;</span><span class="token punctuation">:</span> <span class="token string">&quot;Jill&quot;</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">]</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>This relationship is now accessible through the method that matches the <code>key</code>
+name:</p>
+<pre><code class="lang-js"><span class="token keyword">let</span> customer <span class="token operator">=</span> Customer<span class="token punctuation">.</span><span class="token keyword">get</span><span class="token punctuation">(</span><span class="token punctuation">{</span>id<span class="token punctuation">:</span> <span class="token number">300</span><span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>customer<span class="token punctuation">.</span><span class="token function">contact</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">// [Resource, Resource]</span>
+</code></pre>
+<p>The return value will be an array of <code>Resource</code> objects. You can customize this
+by supplying a <a href="#relationship-options">second argument of options</a> to
+<code>hasMany()</code>.</p>
+<h3 id="one-to-one-many-to-one-relationships">One-to-One, Many-to-One Relationships</h3>
+<p>Beesly does not make a distinction between One-to-One and Many-to-One
+relationships. Each are defined using the <code>hasOne(key)</code> method:</p>
+<pre><code class="lang-js"><span class="token function">setup</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">hasOne</span><span class="token punctuation">(</span><span class="token string">&apos;billing_address&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>The <code>key</code> argument is the key in the embedded collection representing this
+relationship:</p>
+<pre><code class="lang-json"><span class="token punctuation">{</span>
+  <span class="token string">&quot;_embedded&quot;</span><span class="token punctuation">:</span> <span class="token punctuation">{</span>
+    <span class="token string">&quot;billing_address&quot;</span><span class="token punctuation">:</span> <span class="token punctuation">[</span>
+      <span class="token punctuation">{</span>
+        <span class="token string">&quot;postal_code&quot;</span><span class="token punctuation">:</span> <span class="token number">12345</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">]</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>This relationship is now accessible through the method that matches the <code>key</code>
+name:</p>
+<pre><code class="lang-js"><span class="token keyword">let</span> customer <span class="token operator">=</span> Customer<span class="token punctuation">.</span><span class="token keyword">get</span><span class="token punctuation">(</span><span class="token punctuation">{</span>id<span class="token punctuation">:</span> <span class="token number">300</span><span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>customer<span class="token punctuation">.</span><span class="token function">billing_address</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">// Resource</span>
+</code></pre>
+<p>The return value will be a singular <code>Resource</code> object. You can customize this
+by supplying a <a href="#relationship-options">second argument of options</a> to
+<code>hasMany()</code>. If more than one resource is stored at <code>key</code>, only the first one
+will be returned.</p>
+<h3 id="relationship-options">Relationship Options</h3>
+<p>Both <code>hasOne()</code> and <code>hasMany()</code> accept a second argument of <code>options</code>. This
+object can have the following keys:</p>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>class</code></td>
+<td>The class to instantiate for this relationship. For <code>hasOne()</code>, this will result in a single instantiated object of type <code>class</code> returned. For <code>hasMany()</code>, this will result in an  array of instantiated objects of type <code>class</code> returned.</td>
+</tr>
+<tr>
+<td><code>accessor</code></td>
+<td>Changes the method name of the <code>Resource</code> class used to access a related resource.</td>
+</tr>
+</tbody>
+</table>
+<p>For example, if we wanted to access our <code>billing_address</code> with <code>billingAddress</code>
+instead, and have it instantiate an <code>Address</code> resource:</p>
+<pre><code class="lang-js"><span class="token keyword">import</span> <span class="token punctuation">{</span>Resource<span class="token punctuation">}</span> from <span class="token string">&apos;beesly&apos;</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span>Address<span class="token punctuation">}</span> from <span class="token string">&apos;./resources&apos;</span><span class="token punctuation">;</span>
+
+<span class="token keyword">class</span> <span class="token class-name">Customer</span> <span class="token keyword">extends</span> <span class="token class-name">Resource</span> <span class="token punctuation">{</span>
+  <span class="token function">setup</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">hasOne</span><span class="token punctuation">(</span>
+      <span class="token string">&apos;billing_address&apos;</span><span class="token punctuation">,</span>
+      <span class="token punctuation">{</span><span class="token keyword">class</span><span class="token punctuation">:</span> Address<span class="token punctuation">,</span> accessor<span class="token punctuation">:</span> <span class="token string">&apos;billingAddress&apos;</span><span class="token punctuation">}</span>
+    <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<pre><code class="lang-js"><span class="token keyword">import</span> <span class="token punctuation">{</span>Customer<span class="token punctuation">}</span> from <span class="token string">&apos;./resources&apos;</span><span class="token punctuation">;</span>
+
+<span class="token keyword">let</span> customer <span class="token operator">=</span> Customer<span class="token punctuation">.</span><span class="token keyword">get</span><span class="token punctuation">(</span><span class="token punctuation">{</span>id<span class="token punctuation">:</span> <span class="token number">300</span><span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>customer<span class="token punctuation">.</span><span class="token function">billingAddress</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">// Address</span>
+</code></pre>
 
                     
                     </section>
