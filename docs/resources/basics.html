@@ -42,7 +42,7 @@
     <body>
         
         
-    <div class="book" data-level="2.1" data-basepath="../.." data-revision="Sun Jan 31 2016 11:45:55 GMT-0500 (EST)">
+    <div class="book" data-level="2.1" data-basepath="../.." data-revision="Sun Jan 31 2016 14:06:30 GMT-0500 (EST)">
     
 
 <div class="book-summary">
@@ -390,16 +390,18 @@ the fly in preparation of saving it.</p>
 you can retrieve those links via the <code>getLink()</code> method, which accepts a name
 as an argument.</p>
 <p>Using our example above, you could retrieve the <code>self</code> link like so:</p>
-<pre><code class="lang-js">console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>customer<span class="token punctuation">.</span><span class="token function">getLink</span><span class="token punctuation">(</span><span class="token string">&apos;self&apos;</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<pre><code class="lang-js">console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>customer<span class="token punctuation">.</span><span class="token function">getLink</span><span class="token punctuation">(</span><span class="token string">&apos;self&apos;</span><span class="token punctuation">)</span><span class="token punctuation">.</span>href<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token comment" spellcheck="true">// /customer/300</span>
 </code></pre>
-<p><code>getLink()</code> will only return the <code>href</code> for that link.</p>
-<div class="notice">
-Before the 1.0 stable release, <code>getLink()</code> will likely be modified
-to return an object representation of the link `{&quot;href&quot;: &quot;/foo&quot;}` rather than
-returning just the `href`.
-</div>
-
+<p>The <code>getLink()</code> method will return a <code>Link</code> object with any variables from the
+response hydrated as attributes of the <code>Link</code> object. Additionally, the <code>Link</code>
+object has a <code>toString()</code> method such that it can be used as a string.</p>
+<p>Finally, the <code>Link</code> object contains a <code>fill(params)</code> method that will expand
+any templated links:</p>
+<pre><code class="lang-js"><span class="token keyword">let</span> link <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Beesly<span class="token punctuation">.</span>Link</span><span class="token punctuation">(</span><span class="token punctuation">{</span>href<span class="token punctuation">:</span> <span class="token string">&apos;/foo/{bar}&apos;</span><span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>link<span class="token punctuation">.</span><span class="token function">fill</span><span class="token punctuation">(</span><span class="token punctuation">{</span>foo<span class="token punctuation">:</span> <span class="token string">&apos;88&apos;</span><span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">// /foo/88</span>
+</code></pre>
 <h3 id="accessing-embedded-data">Accessing Embedded Data</h3>
 <p>If your API returns <a href="https://tools.ietf.org/html/draft-kelly-json-hal-07#section-4.1.2" target="_blank">embedded resources</a>,
 you can retrieve those resources by using the name of the relationship as an
@@ -426,8 +428,7 @@ of <code>location</code> is encountered:</p>
 </code></pre>
 <p>If a customer will only ever have one location, it gets pretty awkward to do
 <code>customer.location()[0]</code> all the time.</p>
-<p>Learn how to <a href="managing-relationships.html">manage relationships</a>
-better.</p>
+<p>Learn how to <a href="managing-relationships.html">manage relationships</a> better.</p>
 
                     
                     </section>
