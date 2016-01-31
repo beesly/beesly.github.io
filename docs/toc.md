@@ -6,4 +6,8 @@
   * [Basics](docs/resources/basics.md)
   * [Making Requests](docs/resources/making-requests.md)
   * [Managing Relationships](docs/resources/managing-relationships.md)
+* [HTTP Library](docs/http/http.md)
+  * [Request](docs/http/request.md)
+  * [Response](docs/http/response.md)
+  * [Using Interceptors](docs/http/using-interceptors.md)
 * [License](LICENSE.md)
