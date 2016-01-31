@@ -1,7 +1,7 @@
 ## Basics
 
-A resource represents a single HTTP resource, although it may have nested
-relationships. A resource is what's returned by an API call:
+A `Resource` represents a single HTTP resource, although it may have nested
+relationships. A resource is the result of an API call. For instance:
 
 ```text
 GET /customer/300
@@ -28,21 +28,16 @@ Content-Type: application/hal+json
 ### Defining Resources
 
 A resource can be defined by extending the `Beesly.Resource` class. For
-instance, if we wanted to define a resource for our customer resource
+instance, if we wanted to define a resource for our customer response
 above:
 
 ```js
 import {Resource} from 'beesly';
 
 class Customer extends Resource {
-  static get url() {
-    return '/customer/{id}';
-  }
+  // ...
 }
 ```
-
-It is **required** to define a static `url` property. This is used to know where
-to query for retrieving and saving and saving this resource.
 
 ### Loading Resources with Data
 
@@ -75,8 +70,13 @@ console.log(customer.getLink('self'));
 // /customer/300
 ```
 
-`getLink()` will only return the `href` for that link, which is probably a
-limitation that should be fixed.
+`getLink()` will only return the `href` for that link.
+
+<div class="notice">
+Before the 1.0 stable release, <code>getLink()</code> will likely be modified
+to return an object representation of the link `{"href": "/foo"}` rather than
+returning just the `href`.
+</div>
 
 ### Accessing Embedded Data
 
