@@ -66,17 +66,22 @@ as an argument.
 Using our example above, you could retrieve the `self` link like so:
 
 ```js
-console.log(customer.getLink('self'));
+console.log(customer.getLink('self').href);
 // /customer/300
 ```
 
-`getLink()` will only return the `href` for that link.
+The `getLink()` method will return a `Link` object with any variables from the
+response hydrated as attributes of the `Link` object. Additionally, the `Link`
+object has a `toString()` method such that it can be used as a string.
 
-<div class="notice">
-Before the 1.0 stable release, <code>getLink()</code> will likely be modified
-to return an object representation of the link `{"href": "/foo"}` rather than
-returning just the `href`.
-</div>
+Finally, the `Link` object contains a `fill(params)` method that will expand
+any templated links:
+
+```js
+let link = new Beesly.Link({href: '/foo/{bar}'});
+console.log(link.fill({foo: '88'}));
+// /foo/88
+```
 
 ### Accessing Embedded Data
 
@@ -113,5 +118,4 @@ console.log(customer.location());
 If a customer will only ever have one location, it gets pretty awkward to do
 `customer.location()[0]` all the time.
 
-Learn how to [manage relationships](managing-relationships.md)
-better.
+Learn how to [manage relationships](managing-relationships.md) better.
