@@ -3,7 +3,7 @@
 The `Beesly.Request` object represents an HTTP request.
 
 ```js
-new Request(url, data, headers = {});
+new Request(url, content, headers = {});
 ```
 
 The attributes are exposed via accessors with the same name as the
@@ -12,10 +12,13 @@ constructor arguments:
 | Attribute | Description |
 | --- | --- |
 | `url` | The url for the HTTP request |
-| `data` | The raw data of the HTTP request |
+| `content` | The raw content of the HTTP request |
 | `headers` | An object representing the HTTP headers of the request |
 
-<div class="notice">
-Before the 1.0 stable release, <code>data</code> attribute will likely be
-renamed to <code>content</code>.
-</div>
+Additionally, the following methods are available to manage headers:
+
+| Method | Description |
+| --- | --- |
+| `hasHeader(key)` | Returns whether a given header exists |
+| `getHeader(key)` | Retrieves the header by key, or returns undefined if not defined |
+| `setHeader(key, value)` | Sets or replaces a header value |
