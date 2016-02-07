@@ -103,6 +103,8 @@ by supplying a [second argument of options](#relationship-options) to
 `hasMany()`. If more than one resource is stored at `key`, only the first one
 will be returned.
 
+Learn more about [using relationships](using-relationships.md).
+
 ### Relationship Options
 
 Both `hasOne()` and `hasMany()` accept a second argument of `options`. This
