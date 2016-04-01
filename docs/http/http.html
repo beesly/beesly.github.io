@@ -42,7 +42,7 @@
     <body>
         
         
-    <div class="book" data-level="3" data-basepath="../.." data-revision="Sun Feb 07 2016 13:05:01 GMT-0500 (EST)">
+    <div class="book" data-level="3" data-basepath="../.." data-revision="Fri Apr 01 2016 14:36:48 GMT-0400 (EDT)">
     
 
 <div class="book-summary">
@@ -370,49 +370,15 @@ of initial development, none of them supported the <code>Request</code> and <cod
 objects, only <code>fetch()</code> itself. The lack of which made it difficult to
 provide the HTTP interceptors.</p>
 <h3 id="the-http-class">The Http Class</h3>
-<p>The <code>Http</code> class has several convenience methods for making HTTP requests:</p>
-<table>
-<thead>
-<tr>
-<th>Method</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>get()</code></td>
-<td>Performs a HTTP <code>GET</code> request</td>
-</tr>
-<tr>
-<td><code>post()</code></td>
-<td>Performs a HTTP <code>POST</code> request</td>
-</tr>
-<tr>
-<td><code>patch()</code></td>
-<td>Performs a HTTP <code>PATCH</code> request</td>
-</tr>
-<tr>
-<td><code>put()</code></td>
-<td>Performs a HTTP <code>PUT</code> request</td>
-</tr>
-<tr>
-<td><code>delete()</code></td>
-<td>Performs a HTTP <code>DELETE</code> request</td>
-</tr>
-</tbody>
-</table>
-<p>Each of these methods accepts a <code>Request</code> object, and each returns a <code>Promise</code>
-that will either be resolved or rejected with a <code>Response</code> object.</p>
-<p>A response is resolved whenever the status code of the response is &gt;= 200 and
-&lt; 400. If the response&apos;s status code falls outside of this range, the promise
-is rejected.</p>
-<p>The <code>Http</code> class also exposes a <code>send(method, request)</code> method which works the
-same as the individual verb methods outlined above.</p>
-<div class="notice">
-Before the 1.0 stable release, the individual verb methods will
-likely be removed in favor of placing the method on the <code>Request</code>
-object and simply calling <code>send()</code>.
-</div>
+<p>The <code>Http</code> class has one simple method for making a HTTP request: <code>get(request)</code></p>
+<p>This method accepts a <a href="request.html"><code>Request</code></a> object and performs the HTTP
+request described by the object.</p>
+<pre><code class="lang-js"><span class="token keyword">const</span> req <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Request</span><span class="token punctuation">(</span><span class="token string">&apos;get&apos;</span><span class="token punctuation">,</span> <span class="token string">&apos;/foo&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">new</span> <span class="token class-name">Http</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">send</span><span class="token punctuation">(</span>req<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span><span class="token punctuation">(</span>response<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+  <span class="token comment" spellcheck="true">// ...</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<p>The <code>get()</code> method will return a <a href="response.html"><code>Response</code></a> object.</p>
 
                     
                     </section>
@@ -436,6 +402,10 @@ object and simply calling <code>send()</code>.
 
     
     <script src="../../gitbook/plugins/gitbook-plugin-github/plugin.js"></script>
+    
+
+    
+    <script src="../../gitbook/plugins/gitbook-plugin-livereload/plugin.js"></script>
     
 
 <script>
